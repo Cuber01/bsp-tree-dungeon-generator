@@ -1,0 +1,9 @@
+.git
+DungeonGenerator/bin/*
+DungeonGenerator/obj/*
+DungeonGenerator.sln.DotSettings.user
+DungeonGenerator.sln.DotSettings.user
+DungeonGenerator.sln
+*.exe
+*.pdb
+*.dll
