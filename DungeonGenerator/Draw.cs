@@ -7,8 +7,8 @@ namespace DungeonGenerator
 	public class PrimitiveDraw
 	{
 		private static Texture2D pixel;
-		private GraphicsDevice graphicsDevice;
-		private SpriteBatch spriteBatch;
+		private readonly GraphicsDevice graphicsDevice;
+		private readonly SpriteBatch spriteBatch;
 
 		public PrimitiveDraw(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch)
 		{
@@ -16,7 +16,7 @@ namespace DungeonGenerator
 			this.graphicsDevice = graphicsDevice;
 			
 			pixel = new Texture2D(this.graphicsDevice, 1, 1);
-			pixel.SetData(new Color[] { Color.White });
+			pixel.SetData(new[] { Color.White });
 		}
 		
 		public void drawPixel(int x, int y, Color color)
@@ -24,7 +24,7 @@ namespace DungeonGenerator
 			spriteBatch.Draw(pixel, new Vector2(x, y), color);
 		}
 
-		public void drawStraightLine(int x1, int y1, int x2, int y2, Color color)
+		private void drawStraightLine(int x1, int y1, int x2, int y2, Color color)
 		{
 			if (x1 == x2 && y1 == y2)
 			{

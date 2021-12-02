@@ -38,12 +38,6 @@ namespace DungeonGenerator
             graphics.ApplyChanges();
 
             base.Initialize();
-            
-            spriteBatch.Begin();
-            
-            PrimitiveDraw draw = new PrimitiveDraw(GraphicsDevice, spriteBatch);
-            
-            draw.drawPixel(20, 20, mainColor);
         }
         
         protected override void LoadContent()
@@ -64,6 +58,16 @@ namespace DungeonGenerator
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(backgroundColor);
+            
+            spriteBatch.Begin();
+            
+            // TODO you can't make a new object every frame 
+            PrimitiveDraw draw = new PrimitiveDraw(GraphicsDevice, spriteBatch);
+
+            Rectangle rect = new Rectangle(20, 20, 40, 40);
+            draw.drawRectangle(rect, mainColor, true);
+            
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
