@@ -19,7 +19,7 @@ namespace DungeonGenerator
 			pixel.SetData(new[] { Color.White });
 		}
 		
-		public void drawPixel(int x, int y, Color color)
+		private void drawPixel(int x, int y, Color color)
 		{
 			spriteBatch.Draw(pixel, new Vector2(x, y), color);
 		}
@@ -75,10 +75,10 @@ namespace DungeonGenerator
 			}
 			else
 			{
-				drawStraightLine(rect.X, rect.Y, rect.X + rect.Width, rect.Y, color);
-				drawStraightLine(rect.X, rect.Y, rect.X, rect.Y + rect.Height, color);
-				drawStraightLine(rect.X + rect.Width, rect.Y, rect.X + rect.Width, rect.Y + rect.Height, color);
-				drawStraightLine(rect.X, rect.Y + rect.Height, rect.X + rect.Width, rect.Y + rect.Height, color);
+				drawStraightLine(rect.X, rect.Y, rect.X + rect.Width , rect.Y, color);
+				drawStraightLine(rect.X, rect.Y, rect.X, rect.Y + rect.Height , color);
+				drawStraightLine(rect.X + rect.Width , rect.Y, rect.X + rect.Width , rect.Y + rect.Height , color);
+				drawStraightLine(rect.X, rect.Y + rect.Height , rect.X + rect.Width , rect.Y + rect.Height , color);
 			}
 		}
 	}

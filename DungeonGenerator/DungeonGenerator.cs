@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Reflection.Metadata.Ecma335;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -13,6 +15,9 @@ namespace DungeonGenerator
         private readonly Color mainColor = new Color(122, 21, 17);
         private readonly Color backgroundColor = new Color(23, 12, 17);
 
+        public const int minWidth = 25;
+        public const int minHeight = 25;
+
         private const int mapWidth = 250;
         private const int mapHeight = 250;
         private const int scale = 2;
@@ -25,19 +30,22 @@ namespace DungeonGenerator
              IsMouseVisible = true;
         }
 
+        // Create root
+        Branch root = new Branch(0, 0, 0, mapWidth, mapHeight);
         
         protected override void Initialize()
         {
-            // Branch root = new Branch(0, 0, 0, mapWidth, mapHeight);
-            // root.split();
-            //
-            // root.printInfo();
+           
+            root.split();
             
+           // root.printInfo();
+
             graphics.PreferredBackBufferWidth = mapWidth * scale;  
             graphics.PreferredBackBufferHeight = mapHeight * scale; 
             graphics.ApplyChanges();
 
             base.Initialize();
+
         }
         
         protected override void LoadContent()
@@ -47,6 +55,7 @@ namespace DungeonGenerator
         
         protected override void Update(GameTime gameTime)
         {
+
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 Exit();
@@ -57,15 +66,13 @@ namespace DungeonGenerator
         
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(backgroundColor);
-            
-            spriteBatch.Begin();
-            
-            // TODO you can't make a new object every frame 
             PrimitiveDraw draw = new PrimitiveDraw(GraphicsDevice, spriteBatch);
+            var scaleMatrix = Matrix.CreateScale(scale, scale, 1.0f);
 
-            Rectangle rect = new Rectangle(20, 20, 40, 40);
-            draw.drawRectangle(rect, mainColor, true);
+            //GraphicsDevice.Clear(backgroundColor);
+            spriteBatch.Begin(transformMatrix: scaleMatrix);
+            
+            root.draw(draw, mainColor);
             
             spriteBatch.End();
 

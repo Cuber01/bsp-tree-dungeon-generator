@@ -1,4 +1,5 @@
 using System;
+using Microsoft.Xna.Framework;
 
 namespace DungeonGenerator
 {
@@ -26,35 +27,48 @@ namespace DungeonGenerator
 
         public void split()
         {
-            splitRandom();
+            if (level < 5)
+            {
+                splitRandom();
+            }
+            
             lchild?.split();
             rchild?.split();
         }
 
         void splitRandom()
         {
-            if (level > 10)
-            {
-                return;
-            }
-            
             // Split in width
             if (Util.random.Next(0, 2) == 0)
             {
+                int newWidth = Util.random.Next(1, w);
+                
+                // if (newWidth < DungeonGenerator.minWidth)
+                // {
+                //     return;
+                // }
+                
                 // Left
-                lchild = new Branch(level + 1, x, y, w / 2, h);
+                lchild = new Branch(level + 1, x, y, newWidth, h);
 
                 // Right
-                rchild = new Branch(level + 1, x + w / 2, y, w / 2, h);
+                rchild = new Branch(level + 1, x + newWidth, y, w - newWidth, h);
             }
             // Split in height
             else
             {
+                int newHeight = Util.random.Next(1, h);
+                
+                // if (newHeight < DungeonGenerator.minHeight)
+                // {
+                //     return;
+                // }
+                
                 // Up
-                lchild = new Branch(level + 1, x, y, w, h / 2);
+                lchild = new Branch(level + 1, x, y, w, newHeight);
                 
                 // Down 
-                rchild = new Branch(level + 1, x, y + h / 2, w, h / 2 );
+                rchild = new Branch(level + 1, x, y + newHeight, w, h - newHeight );
             }
 
         }
@@ -76,12 +90,21 @@ namespace DungeonGenerator
             Console.Write("\n");
         }
         
-        public void draw()
+        public void draw(PrimitiveDraw draw, Color color)
         {
-            
+            paint(draw, color);
+            lchild?.draw(draw, color);
+            rchild?.draw(draw, color);    
+        }
+
+        private void paint(PrimitiveDraw draw, Color color)
+        {
+            Rectangle rect = new Rectangle(x, y, w, h);
+            draw.drawRectangle(rect, color, false);
         }
         
         
 
     }
 }
+
