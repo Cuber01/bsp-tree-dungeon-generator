@@ -15,8 +15,8 @@ namespace DungeonGenerator
         private readonly Color mainColor = new Color(122, 21, 17);
         private readonly Color backgroundColor = new Color(23, 12, 17);
 
-        public const int minWidth = 25;
-        public const int minHeight = 25;
+        public const double WidthRatio  = 0.45;
+        public const double HeightRatio = 0.45;
 
         private const int mapWidth = 250;
         private const int mapHeight = 250;
@@ -38,10 +38,10 @@ namespace DungeonGenerator
            
             root.split();
             
-           // root.printInfo();
+            //root.printInfo();
 
-            graphics.PreferredBackBufferWidth = mapWidth * scale;  
-            graphics.PreferredBackBufferHeight = mapHeight * scale; 
+            graphics.PreferredBackBufferWidth  = (mapWidth  *  scale)   + 1;  
+            graphics.PreferredBackBufferHeight = (mapHeight * scale)    + 1; 
             graphics.ApplyChanges();
 
             base.Initialize();

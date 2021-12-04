@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using Microsoft.Xna.Framework;
 
 namespace DungeonGenerator
@@ -27,50 +28,93 @@ namespace DungeonGenerator
 
         public void split()
         {
-            if (level < 5)
+
+            if (Util.random.Next(0, 2) == 0)
             {
-                splitRandom();
+                splitHorizontal(40, 0.4);      
+            }
+            else
+            {
+                splitVertical(40, 0.4);    
             }
             
+          
+
             lchild?.split();
             rchild?.split();
         }
 
-        void splitRandom()
+        (int, int, double) splitLineRandom(int width)
         {
-            // Split in width
-            if (Util.random.Next(0, 2) == 0)
-            {
-                int newWidth = Util.random.Next(1, w);
-                
-                // if (newWidth < DungeonGenerator.minWidth)
-                // {
-                //     return;
-                // }
-                
-                // Left
-                lchild = new Branch(level + 1, x, y, newWidth, h);
+            int newWidthLeft  = Util.random.Next(1, width);
+            int newWidthRight = width - newWidthLeft;
+            double aRatio = aspectRatio(newWidthLeft,newWidthRight);
 
-                // Right
-                rchild = new Branch(level + 1, x + newWidth, y, w - newWidth, h);
-            }
-            // Split in height
-            else
+            return (newWidthLeft, newWidthRight, aRatio);
+        }
+        
+        void splitVertical(int minWidth, double ratio)
+        {
+
+            if (w < minWidth)
             {
-                int newHeight = Util.random.Next(1, h);
-                
-                // if (newHeight < DungeonGenerator.minHeight)
-                // {
-                //     return;
-                // }
-                
-                // Up
-                lchild = new Branch(level + 1, x, y, w, newHeight);
-                
-                // Down 
-                rchild = new Branch(level + 1, x, y + newHeight, w, h - newHeight );
+                return;
             }
 
+            int newWidthLeft;
+            int newWidthRight;
+            double aRatio;
+            
+            int counter = 100;
+            ( newWidthLeft, newWidthRight, aRatio ) = splitLineRandom(w);
+
+            while ( ( aRatio < (1 - ratio) || aRatio > (1 + ratio) ) )
+            {
+                ( newWidthLeft, newWidthRight, aRatio ) = splitLineRandom(w);
+
+                counter--;
+                if (counter == 0)
+                {
+                    return;
+                }                
+            }
+
+            lchild = new Branch(level + 1, x, y, newWidthLeft, h);// Left
+            rchild = new Branch(level + 1, x + newWidthLeft, y, newWidthRight, h);// Right
+            
+        }
+
+        void splitHorizontal( int minHeight, double ratio  )
+        {
+            
+            if (h < minHeight)
+            {
+                return;
+            }
+
+            int newHeightTop;
+            int newHeightBottom;
+            double aRatio;
+            
+            int counter = 100;
+            ( newHeightTop, newHeightBottom, aRatio ) = splitLineRandom(h);
+
+            while ( ( aRatio < (1 - ratio) || aRatio > (1 + ratio)  )  )
+            {
+                ( newHeightTop, newHeightBottom, aRatio )= splitLineRandom(h);               
+                if (counter-- == 0) { return; }                
+            }
+            
+
+            lchild = new Branch(level + 1, x, y, w, newHeightTop);
+            rchild = new Branch(level + 1, x, y + newHeightTop, w, newHeightBottom );
+
+        }
+
+        double aspectRatio(int a, int b)
+        {
+            double rv = (double)a / (double)b;
+            return rv;
         }
 
         public void printInfo()
@@ -103,8 +147,8 @@ namespace DungeonGenerator
             draw.drawRectangle(rect, color, false);
         }
         
-        
-
     }
 }
+
+
 
