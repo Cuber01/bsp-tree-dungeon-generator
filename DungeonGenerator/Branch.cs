@@ -1,5 +1,4 @@
 using System;
-using System.Reflection;
 using Microsoft.Xna.Framework;
 
 namespace DungeonGenerator
@@ -26,31 +25,39 @@ namespace DungeonGenerator
             this.h = h;
         }
 
+        /*
+         So, we have a few ways how we can go about stopping the tree.
+         1. The one used at the time of writing this (commit 0d665e6773a30e77e4b520e896ba2745d37ee4dc),  
+            check if either Width or Height (depending on in which direction are we currently splitting)
+            is bigger than the minimum variable provided.
+         2. Stop the tree when it reaches a given level (tree depth).
+         3. Stop the tree when both Width and Height are bigger than the minimum.
+        */
+        
         public void split()
         {
 
             if (Util.random.Next(0, 2) == 0)
             {
-                splitHorizontal(40, 0.4);      
+                splitHorizontal(DungeonGenerator.minHeight, DungeonGenerator.heightRatio);      
             }
             else
             {
-                splitVertical(40, 0.4);    
+                splitVertical(DungeonGenerator.minWidth, DungeonGenerator.widthRatio);    
             }
-            
-          
 
             lchild?.split();
             rchild?.split();
         }
 
-        (int, int, double) splitLineRandom(int width)
+        static (int, int, double) splitLineRandom(int length)
         {
-            int newWidthLeft  = Util.random.Next(1, width);
-            int newWidthRight = width - newWidthLeft;
-            double aRatio = aspectRatio(newWidthLeft,newWidthRight);
+            // Length of the Left/Right part of the line
+            int newLengthLeft  = Util.random.Next(1, length);
+            int newLengthRight = length - newLengthLeft;
+            double aRatio = aspectRatio(newLengthLeft,newLengthRight);
 
-            return (newWidthLeft, newWidthRight, aRatio);
+            return (newLengthLeft, newLengthRight, aRatio);
         }
         
         void splitVertical(int minWidth, double ratio)
@@ -101,8 +108,15 @@ namespace DungeonGenerator
 
             while ( ( aRatio < (1 - ratio) || aRatio > (1 + ratio)  )  )
             {
-                ( newHeightTop, newHeightBottom, aRatio )= splitLineRandom(h);               
-                if (counter-- == 0) { return; }                
+                
+                ( newHeightTop, newHeightBottom, aRatio )= splitLineRandom(h);
+
+                counter--;
+                if (counter == 0)
+                {
+                    return;
+                }   
+                
             }
             
 
@@ -111,7 +125,7 @@ namespace DungeonGenerator
 
         }
 
-        double aspectRatio(int a, int b)
+        static double aspectRatio(int a, int b)
         {
             double rv = (double)a / (double)b;
             return rv;
