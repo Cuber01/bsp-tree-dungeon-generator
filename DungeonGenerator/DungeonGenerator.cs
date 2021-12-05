@@ -77,7 +77,8 @@ namespace DungeonGenerator
                 root.drawSections(draw, lineColor);
                 //root.drawRooms(draw, roomColor);
             
-                draw.drawPath(new Point(60, 60), new Point(80, 80), roomColor);
+                //draw.drawPath(new Point(60, 60), new Point(80, 80), roomColor);
+                draw.bersenhamLine(30, 30, 80, 80, roomColor);
             
                 spriteBatch.End();
 
