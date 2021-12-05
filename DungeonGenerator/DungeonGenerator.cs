@@ -12,14 +12,14 @@ namespace DungeonGenerator
         private static SpriteBatch spriteBatch;
         private static GraphicsDeviceManager graphics;
 
-        private readonly Color mainColor = new Color(122, 21, 17);
-        private readonly Color backgroundColor = new Color(23, 12, 17);
-
+        private readonly Color lineColor = new Color(122, 21, 17);
+        private readonly Color roomColor = new Color(227, 224, 255);
+        
         public const int minWidth = 40;
         public const int minHeight = 40;
         
-        public const double widthRatio  = 0.4;
-        public const double heightRatio = 0.4;
+        public const double widthRatio  = 0.45;
+        public const double heightRatio = 0.45;
 
         private const int mapWidth = 250;
         private const int mapHeight = 250;
@@ -73,7 +73,7 @@ namespace DungeonGenerator
             //GraphicsDevice.Clear(backgroundColor);
             spriteBatch.Begin(transformMatrix: scaleMatrix);
             
-            root.draw(draw, mainColor);
+            root.draw(draw, lineColor);
             
             spriteBatch.End();
 

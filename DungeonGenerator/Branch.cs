@@ -1,4 +1,5 @@
 using System;
+using System.Reflection.Metadata;
 using Microsoft.Xna.Framework;
 
 namespace DungeonGenerator
@@ -7,6 +8,7 @@ namespace DungeonGenerator
     {
         private readonly int level;
 
+        public Room room;
         private readonly int x;
         private readonly int y;
         private readonly int w;
@@ -109,7 +111,7 @@ namespace DungeonGenerator
             while ( ( aRatio < (1 - ratio) || aRatio > (1 + ratio)  )  )
             {
                 
-                ( newHeightTop, newHeightBottom, aRatio )= splitLineRandom(h);
+                ( newHeightTop, newHeightBottom, aRatio ) = splitLineRandom(h);
 
                 counter--;
                 if (counter == 0)
@@ -146,6 +148,20 @@ namespace DungeonGenerator
             Console.ResetColor();
             Console.Write(x + ", " + y + ", " + w + ", " + h);
             Console.Write("\n");
+        }
+
+        public void makeRooms()
+        {
+            room = new Room(x, y, w, h);
+            lchild?.makeRooms();
+            rchild?.makeRooms();
+        }
+
+        public void paintRooms(PrimitiveDraw draw, Color color)
+        {
+            room.paint(draw, color);
+            lchild?.paintRooms(draw, color);
+            rchild?.paintRooms(draw, color);
         }
         
         public void draw(PrimitiveDraw draw, Color color)
