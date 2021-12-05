@@ -23,6 +23,8 @@ namespace DungeonGenerator
         private const int mapHeight = 250;
         private const int scale = 2;
 
+        private bool finished;
+
 
         public DungeonGenerator()
         {
@@ -65,18 +67,24 @@ namespace DungeonGenerator
         
         protected override void Draw(GameTime gameTime)
         {
-            PrimitiveDraw draw = new PrimitiveDraw(GraphicsDevice, spriteBatch);
-            var scaleMatrix = Matrix.CreateScale(scale, scale, 1.0f);
-
-            //GraphicsDevice.Clear(backgroundColor);
-            spriteBatch.Begin(transformMatrix: scaleMatrix);
+            if (!finished)
+            {
+                PrimitiveDraw draw = new PrimitiveDraw(GraphicsDevice, spriteBatch);
+                var scaleMatrix = Matrix.CreateScale(scale, scale, 1.0f);
             
-            root.drawSections(draw, lineColor);
-            root.drawRooms(draw, roomColor);
+                spriteBatch.Begin(transformMatrix: scaleMatrix);
             
-            spriteBatch.End();
+                root.drawSections(draw, lineColor);
+                //root.drawRooms(draw, roomColor);
+            
+                draw.drawPath(new Point(60, 60), new Point(80, 80), roomColor);
+            
+                spriteBatch.End();
 
-            base.Draw(gameTime);
+                base.Draw(gameTime);
+
+                finished = true;
+            }
         }
     }
 }
