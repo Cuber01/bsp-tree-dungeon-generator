@@ -38,8 +38,8 @@ namespace DungeonGenerator
         
         protected override void Initialize()
         {
-           
             root.split();
+            root.makeRooms();
 
             graphics.PreferredBackBufferWidth  = (mapWidth  *  scale)   + 1;  
             graphics.PreferredBackBufferHeight = (mapHeight * scale)    + 1; 
@@ -73,7 +73,8 @@ namespace DungeonGenerator
             //GraphicsDevice.Clear(backgroundColor);
             spriteBatch.Begin(transformMatrix: scaleMatrix);
             
-            root.draw(draw, lineColor);
+            root.drawSections(draw, lineColor);
+            root.drawRooms(draw, roomColor);
             
             spriteBatch.End();
 

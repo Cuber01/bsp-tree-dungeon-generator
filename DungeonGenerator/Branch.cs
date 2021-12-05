@@ -7,8 +7,9 @@ namespace DungeonGenerator
     public class Branch
     {
         private readonly int level;
+        private bool isSplit; // Starts as false!
 
-        public Room room;
+        private Room room;
         private readonly int x;
         private readonly int y;
         private readonly int w;
@@ -38,7 +39,6 @@ namespace DungeonGenerator
         
         public void split()
         {
-
             if (Util.random.Next(0, 2) == 0)
             {
                 splitHorizontal(DungeonGenerator.minHeight, DungeonGenerator.heightRatio);      
@@ -52,16 +52,6 @@ namespace DungeonGenerator
             rchild?.split();
         }
 
-        static (int, int, double) splitLineRandom(int length)
-        {
-            // Length of the Left/Right part of the line
-            int newLengthLeft  = Util.random.Next(1, length);
-            int newLengthRight = length - newLengthLeft;
-            double aRatio = aspectRatio(newLengthLeft,newLengthRight);
-
-            return (newLengthLeft, newLengthRight, aRatio);
-        }
-        
         void splitVertical(int minWidth, double ratio)
         {
 
@@ -88,8 +78,10 @@ namespace DungeonGenerator
                 }                
             }
 
-            lchild = new Branch(level + 1, x, y, newWidthLeft, h);// Left
-            rchild = new Branch(level + 1, x + newWidthLeft, y, newWidthRight, h);// Right
+            lchild = new Branch(level + 1, x, y, newWidthLeft, h); // Left
+            rchild = new Branch(level + 1, x + newWidthLeft, y, newWidthRight, h); // Right
+            
+            isSplit = true;
             
         }
 
@@ -121,10 +113,21 @@ namespace DungeonGenerator
                 
             }
             
+            lchild = new Branch(level + 1, x, y, w, newHeightTop); // Top
+            rchild = new Branch(level + 1, x, y + newHeightTop, w, newHeightBottom ); // Bottom
+            
+            isSplit = true;
 
-            lchild = new Branch(level + 1, x, y, w, newHeightTop);
-            rchild = new Branch(level + 1, x, y + newHeightTop, w, newHeightBottom );
+        }
+        
+        static (int, int, double) splitLineRandom(int length)
+        {
+            // Length of the Left/Right part of the line
+            int newLengthLeft  = Util.random.Next(1, length);
+            int newLengthRight = length - newLengthLeft;
+            double aRatio = aspectRatio(newLengthLeft,newLengthRight);
 
+            return (newLengthLeft, newLengthRight, aRatio);
         }
 
         static double aspectRatio(int a, int b)
@@ -133,6 +136,38 @@ namespace DungeonGenerator
             return rv;
         }
 
+        public void makeRooms()
+        {
+            // We don't need rooms for sections which were split - only for their children which are the only ones visible to the user.
+            if (!isSplit)
+            {
+                room = new Room(x, y, w, h);
+            }
+            
+            lchild?.makeRooms();
+            rchild?.makeRooms();
+        }
+
+        public void drawRooms(PrimitiveDraw draw, Color color)
+        {
+            room?.paint(draw, color);
+            lchild?.drawRooms(draw, color);
+            rchild?.drawRooms(draw, color);
+        }
+        
+        public void drawSections(PrimitiveDraw draw, Color color)
+        {
+            paint(draw, color);
+            lchild?.drawSections(draw, color);
+            rchild?.drawSections(draw, color);    
+        }
+
+        private void paint(PrimitiveDraw draw, Color color)
+        {
+            Rectangle rect = new Rectangle(x, y, w, h);
+            draw.drawRectangle(rect, color, false);
+        }
+        
         public void printInfo()
         {
             printDebugInfo();
@@ -148,33 +183,6 @@ namespace DungeonGenerator
             Console.ResetColor();
             Console.Write(x + ", " + y + ", " + w + ", " + h);
             Console.Write("\n");
-        }
-
-        public void makeRooms()
-        {
-            room = new Room(x, y, w, h);
-            lchild?.makeRooms();
-            rchild?.makeRooms();
-        }
-
-        public void paintRooms(PrimitiveDraw draw, Color color)
-        {
-            room.paint(draw, color);
-            lchild?.paintRooms(draw, color);
-            rchild?.paintRooms(draw, color);
-        }
-        
-        public void draw(PrimitiveDraw draw, Color color)
-        {
-            paint(draw, color);
-            lchild?.draw(draw, color);
-            rchild?.draw(draw, color);    
-        }
-
-        private void paint(PrimitiveDraw draw, Color color)
-        {
-            Rectangle rect = new Rectangle(x, y, w, h);
-            draw.drawRectangle(rect, color, false);
         }
         
     }

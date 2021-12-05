@@ -12,18 +12,18 @@ namespace DungeonGenerator
         
         public Room(int x, int y, int w, int h)
         {
-            this.x = x + Util.random.Next(0, (w / 3) + 1);
-            this.y = y + Util.random.Next(0, (h / 3) + 1);
+            this.x = x + Util.random.Next(0, (w / 3));
+            this.y = y + Util.random.Next(0, (h / 3));
             this.w = w - (this.x - x);
             this.h = h - (this.y - y);
-            this.w -= Util.random.Next(0, (this.w / 3) + 1);
-            this.h -= Util.random.Next(0, (this.w / 3) + 1);
+            this.w -= Util.random.Next(0, (this.w / 3));
+            this.h -= Util.random.Next(0, (this.w / 3));
         }
         
         public void paint(PrimitiveDraw draw, Color color)
         {
             Rectangle rect = new Rectangle(x, y, w, h);
-            draw.drawRectangle(rect, color, false);
+            draw.drawRectangle(rect, color, true);
         }
         
     }
