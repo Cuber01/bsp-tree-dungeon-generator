@@ -2,4 +2,4 @@
 
 Well that's a start isn't it?
 
-[](image.png)
+![](./image.png)
