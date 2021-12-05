@@ -7,7 +7,11 @@ namespace DungeonGenerator
     public class Branch
     {
         private readonly int level;
-        private bool isSplit; // Starts as false!
+
+        // Starts as false!
+        private bool triedHorizontal;
+        private bool triedVertical;
+        private bool isSplit; 
 
         private Room room;
         private readonly int x;
@@ -45,23 +49,31 @@ namespace DungeonGenerator
         {
             if (Util.random.Next(0, 2) == 0)
             {
-                splitHorizontal(DungeonGenerator.minHeight, DungeonGenerator.heightRatio);      
+                bool horizontalSuccess = splitHorizontal(DungeonGenerator.minHeight, DungeonGenerator.heightRatio);  
+                if(!horizontalSuccess)
+                {
+                    splitVertical(DungeonGenerator.minWidth, DungeonGenerator.widthRatio); 
+                }
             }
             else
             {
-                splitVertical(DungeonGenerator.minWidth, DungeonGenerator.widthRatio);    
+                bool verticalSuccess = splitVertical(DungeonGenerator.minWidth, DungeonGenerator.widthRatio);
+                if (!verticalSuccess)
+                {
+                    splitHorizontal(DungeonGenerator.minHeight, DungeonGenerator.heightRatio);  
+                }
             }
 
             lchild?.split();
             rchild?.split();
         }
 
-        void splitVertical(int minWidth, double ratio)
+        bool splitVertical(int minWidth, double ratio)
         {
 
             if (w < minWidth)
             {
-                return;
+                return false;
             }
 
             int newWidthLeft;
@@ -78,7 +90,7 @@ namespace DungeonGenerator
                 counter--;
                 if (counter == 0)
                 {
-                    return;
+                    return false;
                 }                
             }
 
@@ -86,15 +98,15 @@ namespace DungeonGenerator
             rchild = new Branch(level + 1, x + newWidthLeft, y, newWidthRight, h); // Right
             
             isSplit = true;
-            
+            return true;
         }
 
-        void splitHorizontal( int minHeight, double ratio  )
+        bool splitHorizontal( int minHeight, double ratio  )
         {
             
             if (h < minHeight)
             {
-                return;
+                return false;
             }
 
             int newHeightTop;
@@ -112,7 +124,7 @@ namespace DungeonGenerator
                 counter--;
                 if (counter == 0)
                 {
-                    return;
+                    return false;
                 }   
                 
             }
@@ -121,7 +133,7 @@ namespace DungeonGenerator
             rchild = new Branch(level + 1, x, y + newHeightTop, w, newHeightBottom ); // Bottom
             
             isSplit = true;
-
+            return true;
         }
         
         static (int, int, double) splitLineRandom(int length)
