@@ -145,7 +145,7 @@ namespace DungeonGenerator
             // We don't need rooms for sections which were split - only for their children which are the only ones visible to the user.
             if (!isSplit)
             {
-                //room = new Room(x, y, w, h);
+                room = new Room(x, y, w, h);
             }
             
             lchild?.makeRooms();
@@ -171,6 +171,27 @@ namespace DungeonGenerator
 
             // moveTo(center.X, center.Y);
             // c.lineTo(destination.X, destination.Y);
+        }
+        
+        public void drawConnections(PrimitiveDraw draw, Color color)
+        {
+            paintConnection(draw, color);
+            lchild?.drawConnections(draw, color);
+            rchild?.drawConnections(draw, color);    
+        }
+
+        private void paintConnection(PrimitiveDraw draw, Color color)
+        {
+            if (lchild != null)
+            {
+                draw.bersenhamLine(center.X, center.Y, lchild.center.X, lchild.center.Y, color);
+            }
+
+            if (rchild != null)
+            {
+                draw.bersenhamLine(center.X, center.Y, rchild.center.X, rchild.center.Y, color);
+            }
+  
         }
         
         public void drawSections(PrimitiveDraw draw, Color color)
