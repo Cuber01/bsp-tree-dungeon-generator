@@ -1,6 +1,4 @@
-﻿using System;
-using System.Reflection.Metadata.Ecma335;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -14,7 +12,7 @@ namespace DungeonGenerator
 
         private readonly Color lineColor = new Color(122, 21, 17);
         private readonly Color roomColor = new Color(227, 224, 255);
-        
+
         public const int minWidth = 40;
         public const int minHeight = 40;
         

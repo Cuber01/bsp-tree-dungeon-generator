@@ -15,6 +15,8 @@ namespace DungeonGenerator
         private readonly int w;
         private readonly int h;
 
+        private Point center;
+
         private Branch lchild;
         private Branch rchild;
 
@@ -26,6 +28,8 @@ namespace DungeonGenerator
             this.y = y;
             this.w = w;
             this.h = h;
+
+            this.center = new Point(this.x + (this.w/2), this.y + (this.h / 2));
         }
 
         /*
@@ -141,7 +145,7 @@ namespace DungeonGenerator
             // We don't need rooms for sections which were split - only for their children which are the only ones visible to the user.
             if (!isSplit)
             {
-                room = new Room(x, y, w, h);
+                //room = new Room(x, y, w, h);
             }
             
             lchild?.makeRooms();
@@ -153,6 +157,20 @@ namespace DungeonGenerator
             room?.paint(draw, color);
             lchild?.drawRooms(draw, color);
             rchild?.drawRooms(draw, color);
+        }
+
+        public void drawPaths(PrimitiveDraw draw, Color color)
+        {
+            paintPath(draw, color, new Point(20, 20));
+            lchild?.drawPaths(draw, color);
+            rchild?.drawPaths(draw, color);
+        }
+
+        private void paintPath(PrimitiveDraw draw, Color color, Point destination)
+        {
+
+            // moveTo(center.X, center.Y);
+            // c.lineTo(destination.X, destination.Y);
         }
         
         public void drawSections(PrimitiveDraw draw, Color color)

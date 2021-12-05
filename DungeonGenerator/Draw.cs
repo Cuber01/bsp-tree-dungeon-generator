@@ -81,5 +81,32 @@ namespace DungeonGenerator
 				drawStraightLine(rect.X, rect.Y + rect.Height , rect.X + rect.Width , rect.Y + rect.Height , color);
 			}
 		}
+
+		public void drawPath(Point current, Point destination, Color color)
+		{
+			// If they can be connected by drawing one straight line
+			if (current.X == destination.X)
+			{
+				drawStraightLine(current.X, current.Y, destination.X, destination.Y, color);
+			} else if (current.Y == destination.Y)
+			{
+				drawStraightLine(current.X, current.Y, destination.X, destination.Y, color);
+			}
+			else // Else draw an 'L'
+			{
+				// Go either 'I' or '—'. Doesn't matter which one we choose since the final path will always be the same.
+				if (Util.random.Next(0, 2) == 0)
+				{
+					drawStraightLine(current.X, current.Y, destination.X, current.Y, color);	// '—'
+					drawStraightLine(destination.X, current.Y, destination.X, destination.Y, color); // 'I'
+				}
+				else
+				{
+					drawStraightLine(current.X, current.Y, current.X, destination.Y, color);	// 'I'
+					drawStraightLine(current.X, destination.Y, destination.X, destination.Y, color); // '—'
+				}
+				
+			}
+		}
 	}
 }
