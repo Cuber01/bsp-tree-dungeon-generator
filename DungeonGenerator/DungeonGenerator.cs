@@ -6,15 +6,15 @@ namespace DungeonGenerator
 {
     public class DungeonGenerator : Game
     {
-        
+
         private static SpriteBatch spriteBatch;
         private static GraphicsDeviceManager graphics;
 
         private readonly Color lineColor = new Color(122, 21, 17);
-        private readonly Color roomColor = new Color(227, 224, 255);
+        public static readonly Color roomColor = new Color(227, 224, 255);
 
-        public const int minWidth = 40;
-        public const int minHeight = 40;
+        public const int minWidth = 50;
+        public const int minHeight = 50;
         
         public const double widthRatio  = 0.45;
         public const double heightRatio = 0.45;
@@ -22,6 +22,10 @@ namespace DungeonGenerator
         private const int mapWidth = 250;
         private const int mapHeight = 250;
         private const int scale = 2;
+        
+        #if ARRAY_OUTPUT
+        public static readonly int[,] map = new int[mapWidth, mapHeight];
+        #endif
 
         private bool finished;
 
@@ -73,11 +77,12 @@ namespace DungeonGenerator
                 var scaleMatrix = Matrix.CreateScale(scale, scale, 1.0f);
             
                 spriteBatch.Begin(transformMatrix: scaleMatrix);
+                
+                
             
                 root.drawSections(draw, lineColor);
                 root.drawRooms(draw, roomColor);
-            
-                //draw.drawPath(new Point(60, 60), new Point(80, 80), roomColor);
+                
                 root.drawConnections(draw, roomColor);
             
                 spriteBatch.End();

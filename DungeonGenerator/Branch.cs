@@ -38,11 +38,12 @@ namespace DungeonGenerator
 
         /*
          So, we have a few ways how we can go about stopping the tree.
-         1. The one used at the time of writing this (commit 0d665e6773a30e77e4b520e896ba2745d37ee4dc),  
-            check if either Width or Height (depending on in which direction are we currently splitting)
+         1. Check if either Width or Height (depending on in which direction are we currently splitting)
             is bigger than the minimum variable provided.
          2. Stop the tree when it reaches a given level (tree depth).
          3. Stop the tree when both Width and Height are bigger than the minimum.
+         
+         As of now, we're using method 3
         */
         
         public void split()

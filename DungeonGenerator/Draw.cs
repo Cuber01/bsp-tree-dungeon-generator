@@ -22,6 +22,13 @@ namespace DungeonGenerator
 		private void drawPixel(int x, int y, Color color)
 		{
 			spriteBatch.Draw(pixel, new Vector2(x, y), color);
+
+			#if ARRAY_OUTPUT
+			if (color == DungeonGenerator.roomColor)
+			{
+				DungeonGenerator.map[x, y] = 1;
+			}
+			#endif
 		}
 
 		private void drawStraightLine(int x1, int y1, int x2, int y2, Color color)
