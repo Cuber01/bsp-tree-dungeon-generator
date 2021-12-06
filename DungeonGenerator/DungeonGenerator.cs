@@ -38,7 +38,7 @@ namespace DungeonGenerator
         }
 
         // Create root
-        Branch root = new Branch(0, 0, 0, mapWidth, mapHeight);
+        readonly Branch root = new Branch(0, 0, 0, mapWidth, mapHeight);
         
         protected override void Initialize()
         {

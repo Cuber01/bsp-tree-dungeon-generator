@@ -1,5 +1,4 @@
 using System;
-using System.Reflection.Metadata;
 using Microsoft.Xna.Framework;
 
 namespace DungeonGenerator
@@ -9,8 +8,6 @@ namespace DungeonGenerator
         private readonly int level;
 
         // Starts as false!
-        private bool triedHorizontal;
-        private bool triedVertical;
         private bool isSplit; 
 
         private Room room;
@@ -19,7 +16,7 @@ namespace DungeonGenerator
         private readonly int w;
         private readonly int h;
 
-        private Point center;
+        private readonly Point center;
 
         private Branch lchild;
         private Branch rchild;
@@ -172,20 +169,7 @@ namespace DungeonGenerator
             rchild?.drawRooms(draw, color);
         }
 
-        public void drawPaths(PrimitiveDraw draw, Color color)
-        {
-            paintPath(draw, color, new Point(20, 20));
-            lchild?.drawPaths(draw, color);
-            rchild?.drawPaths(draw, color);
-        }
 
-        private void paintPath(PrimitiveDraw draw, Color color, Point destination)
-        {
-
-            // moveTo(center.X, center.Y);
-            // c.lineTo(destination.X, destination.Y);
-        }
-        
         public void drawConnections(PrimitiveDraw draw, Color color)
         {
             paintConnection(draw, color);
